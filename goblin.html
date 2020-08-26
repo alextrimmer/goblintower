@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+ 
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <title>Goblin Tower: RPG</title>
+    <script type="text/javascript">
+	let currentStep = 0;
+	let currentGold = 5;
+	let currentHealth = 20;
+	let currentLevel = 1;
+	let currentPotions = 1;
+	let maxHealth = 20;
+	let goblinsKilled = 0;
+	var potionHidden = false;
+	let bestName = "";
+	let mostKilled = 0;
+	let maxLevel = 0;
+		function onLoad() {		
+			document.getElementById("currentStep").innerText = currentStep;
+			document.getElementById("currentHealth").innerText = currentHealth;
+			document.getElementById("currentGold").innerText = currentGold;
+			document.getElementById("currentLevel").innerText = currentLevel;
+			document.getElementById("currentPotions").innerText = currentPotions;
+			document.getElementById("goblinsKilled").innerText = goblinsKilled;
+			document.getElementById("maxHealth").innerText = maxHealth;
+			document.getElementById('potion').style.visibility = 'hidden';
+			document.getElementById("buyPotions").style.visibility = 'hidden';
+			document.getElementById("yesButton").style.visibility = 'hidden';
+			document.getElementById("noButton").style.visibility = 'hidden';
+			document.getElementById("playAgain").style.visibility = 'hidden';
+		}
+        function greetTheUser() {
+            var userName = prompt("What is your name?");
+            document.getElementById("userName").innerText = userName;
+        }
+		function takeStep() {
+			document.getElementById("buyPotions").style.visibility = 'hidden';
+			currentStep += 1;
+			document.getElementById("currentStep").innerText = currentStep;
+			let goblinEncounter = Math.floor(Math.random() * 10); 
+			if (goblinEncounter < 4) {
+				currentHealth = currentHealth - 2;
+				document.getElementById("currentHealth").innerText = currentHealth;
+				currentGold += 1;
+				document.getElementById("currentGold").innerText = currentGold;
+				goblinsKilled++;
+				document.getElementById("goblinsKilled").innerText = goblinsKilled;
+				alert("Encountered a goblin! - 2 HP");
+				if (currentPotions >= 1) {
+					document.getElementById('potion').style.visibility = 'visible';
+				}
+			}
+			if (currentStep%15 == 0) {
+				currentLevel++;
+				alert("Level up! Max health + 2. Gained 6 HP. You can buy Potions for this turn only.");
+				maxHealth = maxHealth + 2;
+				currentHealth = currentHealth + 6;
+				document.getElementById("currentLevel").innerText = currentLevel;
+				document.getElementById("currentHealth").innerText = currentHealth;
+				document.getElementById("maxHealth").innerText = maxHealth;
+				document.getElementById("buyPotions").style.visibility = 'visible';
+				if (currentPotions >= 1) {
+					document.getElementById('potion').style.visibility = 'visible';
+				}				
+			}
+			if (currentHealth == 0) {
+				alert("Game over!");
+				document.getElementById('step').style.visibility = 'hidden';
+				document.getElementById("playAgain").style.visibility = 'visible';
+				document.getElementById("yesButton").style.visibility = 'visible';
+				document.getElementById("noButton").style.visibility = 'visible';			
+			}			
+		}
+		function buyPotion() {
+			if (currentGold >= 3 && currentPotions < 5) {
+			currentPotions++;
+			document.getElementById("currentPotions").innerText = currentPotions;
+			currentGold = currentGold - 3;
+			document.getElementById("currentGold").innerText = currentGold;
+			alert("Bought a potion!");	
+			} else if (currentGold < 3) {
+			alert("Not enough gold!");
+			} else if (currentPotions >= 5) {
+			alert("You're carrying too many potions.");
+			}
+			if (currentPotions >= 1) {
+				document.getElementById('potion').style.visibility = 'visible';
+			}
+		}
+		function drinkPotion() {
+			if (currentPotions == 0) {
+				document.getElementById('potion').style.visibility = 'hidden';
+				alert("Not enough potions!");
+			} else {
+			currentHealth = currentHealth + 2;
+			document.getElementById("currentHealth").innerText = currentHealth;
+			currentPotions--;
+			document.getElementById("currentPotions").innerText = currentPotions;
+			if (currentHealth == maxHealth) {
+				document.getElementById('potion').style.visibility = 'hidden';
+				}			
+			}
+			if (currentPotions >= 1) {
+				document.getElementById('potion').style.visibility = 'visible';
+			}				
+		}
+		function gameOver() {
+			alert("Thanks for playing! You took " + currentStep + " steps, left " + currentGold + " gold to your heir, and killed " + goblinsKilled + " goblins!");
+		}
+		function reset() {
+			alert("Last round you took " + currentStep + " steps, left " + currentGold + " gold to your heir, and killed " + goblinsKilled + " goblins! Can you do better?");
+			currentStep = 0;
+			currentGold = 5;
+			currentHealth = 20;
+			currentLevel = 1;
+			currentPotions = 1;
+			maxHealth = 20;		
+			goblinsKilled = 0;
+			document.getElementById("currentStep").innerText = currentStep;
+			document.getElementById("currentHealth").innerText = currentHealth;
+			document.getElementById("currentGold").innerText = currentGold;
+			document.getElementById("currentLevel").innerText = currentLevel;
+			document.getElementById("currentPotions").innerText = currentPotions;
+			document.getElementById("goblinsKilled").innerText = goblinsKilled;
+			document.getElementById('potion').style.visibility = 'hidden';
+			document.getElementById("buyPotions").style.visibility = 'hidden';
+			document.getElementById("yesButton").style.visibility = 'hidden';
+			document.getElementById("noButton").style.visibility = 'hidden';
+			document.getElementById("playAgain").style.visibility = 'hidden';
+			document.getElementById('step').style.visibility = 'visible';			
+		}
+    </script>
+	<link rel="stylesheet" href="C:\Users\Owner\Documents\AspireProjects\Module7\mod-7-js-react-exercises-alextrimmer\goblin\goblin.css">
+</head>
+<body style = "color: white" onload="onLoad();">
+<center>
+    <div>
+		<br />
+		<br />
+    </div>
+	<div id="playAgain">
+		Play again?
+	</div>	
+	<div>
+		<button id = "noButton" onclick = "gameOver();">No, I quit</button>
+		<button id = "yesButton" onclick = "reset();">Let's go!</button>
+	</div>
+    <div>
+        <h1></h1>
+		
+		<p> 
+				<pre>                     
+            888     888        
+                888     888            
+ .d88b.  .d88b. 88888b. 88888888888b.  
+d88P"88bd88""88b888 "88b888888888 "88b 
+888  888888  888888  888888888888  888 
+Y88b 888Y88..88P888 d88P888888888  888 
+ "Y88888 "Y88P" 88888P" 888888888  888 
+     888                               
+Y8b d88P               tower                
+   </pre>
+
+		<br />
+		<button onclick="greetTheUser();">Change name</button>
+		<br />
+		<br />
+		<button id = "step" onclick="takeStep();">Take a step</button>
+		<br />
+		<br />
+		<button id = "potion" onclick="drinkPotion();">Drink a potion</button>
+		<br />
+		<button id = "buyPotions" onclick = "buyPotion();">Buy potions! (3 gold each)</button>
+		<br />
+		<br />
+		Name: <span id="userName"></span>
+		<br />
+		<br />
+		Steps: <span id="currentStep"></span>
+		<br />
+		<br />
+		Level: <span id="currentLevel"></span>
+		<br />
+		HP: <span id="currentHealth"></span>/<span id="maxHealth"></span>
+		<br />
+		Gold: <span id="currentGold"></span>
+		<br />
+		Potions: <span id="currentPotions"></span>/5
+		<br />
+		Goblins Killed: <span id="goblinsKilled"></span>
+		<br />
+<pre id = "goblin">   
+           /(.-""-.)\
+       |\  \/      \/   /|
+       | \ / =.  .= \  / |
+        \( \   o\/o   / )/
+        \_, '-/  \-' ,_/
+       /   \__/   \
+       \ \__/\__/ /
+        _\ \|--|/ /___
+die!   /`  \      /    `\
+      /     '----'       \</pre>
+	  <br />
+		by Alex Trimmer
+		</p>
+    </div> 
+	</center>
+</body>
+</html>
